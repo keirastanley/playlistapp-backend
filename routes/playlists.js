@@ -1,6 +1,5 @@
 import express from "express";
-import { getAllPlaylists } from "../services/playlists.js";
-// import {getPlaylists, getPlaylistById, addNewPlaylist, editPlaylist, deletePlaylist} from "../services/playlists.js"
+import { getAllPlaylists, getPlaylistById, addNewPlaylist, editPlaylist, deletePlaylist} from "../services/playlists.js";
 
 const playlistsRouter = express.Router();
 
@@ -13,24 +12,40 @@ playlistsRouter.get("/", async (req, res) => {
     }
   });
 
-// playlistsRouter.get("/:id", async function (req, res) {
-//     const result = await getPlaylistById(req.params.id);
-//     res.json({success: true, payload: result})
-// })
+playlistsRouter.get("/:id", async (req, res) => {
+    try { 
+        const playlists = await getPlaylistById(req.params.id);
+        res.send({ success: true, payload: playlists });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
-// playlistsRouter.post("/", async function (req, res) {
-//     const result = await addNewPlaylist(req.body);
-//     res.json({success: true, payload: result})
-// })
+playlistsRouter.post("/", async function (req, res) {
+    try { 
+        const result = await addNewPlaylist(req.body);
+        res.send({ success: true, payload: result });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
-// playlistsRouter.patch("/:id", async function (req, res) {
-//     const result = await editPlaylist(req.params.id, req.body);
-//     res.json({success: true, payload: result})
-// })
+playlistsRouter.patch("/:id", async function (req, res) {
+    try { 
+        const result = await editPlaylist(req.params.id, req.body);
+        res.send({ success: true, payload: result });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
-// playlistsRouter.delete("/:id", async function (req, res) {
-//     const result = await deletePlaylist(req.params.id);
-//     res.json({success: true, payload: result})
-// })
+playlistsRouter.delete("/:id", async function (req, res) {
+    try { 
+        const result = await deletePlaylist(req.params.id);
+        res.send({ success: true, payload: result });
+        } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})
 
 export default playlistsRouter;
