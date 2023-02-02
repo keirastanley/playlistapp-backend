@@ -21,7 +21,7 @@ playlistsRouter.get("/:id", async (req, res) => {
     }
 })
 
-playlistsRouter.post("/", async function (req, res) {
+playlistsRouter.post("/", async (req, res) => {
     try { 
         const result = await addNewPlaylist(req.body);
         res.send({ success: true, payload: result });
@@ -30,7 +30,7 @@ playlistsRouter.post("/", async function (req, res) {
     }
 })
 
-playlistsRouter.patch("/:id", async function (req, res) {
+playlistsRouter.patch("/:id", async (req, res) => {
     try { 
         const result = await editPlaylist(req.params.id, req.body);
         res.send({ success: true, payload: result });
@@ -39,7 +39,7 @@ playlistsRouter.patch("/:id", async function (req, res) {
     }
 })
 
-playlistsRouter.delete("/:id", async function (req, res) {
+playlistsRouter.delete("/:id", async (req, res) => {
     try { 
         const result = await deletePlaylist(req.params.id);
         res.send({ success: true, payload: result });
