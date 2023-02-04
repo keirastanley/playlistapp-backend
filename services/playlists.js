@@ -16,11 +16,19 @@ export async function addNewPlaylist(playlist){
     return playlist;
 }
 
-export async function addTracksToPlaylist(id, track){
+export async function addTrackToPlaylist(id, track){
     const update = { $addToSet: { tracks: track } }
     await playlistsData.updateOne({ _id: new ObjectId(`${id}`)}, update)
     const editedPlaylist = await playlistsData.find({
         _id: new ObjectId(`${id}`)}).toArray();
+    return editedPlaylist;
+}
+
+export async function deleteTrackFromPlaylist(playlist_id, track_id){
+    const update = { $pull: { "tracks": track_id}}
+    await playlistsData.updateOne({ _id: new ObjectId(`${playlist_id}`)}, update)
+    const editedPlaylist = await playlistsData.find({
+        _id: new ObjectId(`${playlist_id}`)}).toArray();
     return editedPlaylist;
 }
 

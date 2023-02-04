@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllPlaylists, getPlaylistById, addNewPlaylist, addTracksToPlaylist, editPlaylistDetails, deletePlaylist} from "../services/playlists.js";
+import { getAllPlaylists, getPlaylistById, addNewPlaylist, addTrackToPlaylist, deleteTrackFromPlaylist, editPlaylistDetails, deletePlaylist} from "../services/playlists.js";
 
 const playlistsRouter = express.Router();
 
@@ -31,15 +31,23 @@ playlistsRouter.post("/", async (req, res) => {
 })
 
 playlistsRouter.patch("/:id", async (req, res) => {
-    if (req.query.action === "track") {
+    if (req.query.action === "add-track") {
         try { 
-            const result = await addTracksToPlaylist(req.params.id, req.body);
+            const result = await addTrackToPlaylist(req.params.id, req.body);
             res.send({ success: true, payload: result });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     }
-    else {
+    if (req.query.action === "delete") {
+        try { 
+            const result = await deleteTrackFromPlaylist(req.params.id, req.body);
+            res.send({ success: true, payload: result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    if (req.query.action === "update") {
         try { 
             const result = await editPlaylistDetails(req.params.id, req.body);
             res.send({ success: true, payload: result });
