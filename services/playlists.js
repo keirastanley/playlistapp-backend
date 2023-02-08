@@ -42,6 +42,24 @@ export async function deleteTrackFromPlaylist(playlist_id, track_id) {
     return editedPlaylist;
 }
 
+export async function addAccessUser(playlist_id, user_id) {
+    const update = { $addToSet: { "access": user_id } }
+    await playlistsData.updateOne({ _id: new ObjectId(`${playlist_id}`) }, update)
+    const editedPlaylist = await playlistsData.find({
+        _id: new ObjectId(`${playlist_id}`)
+    }).toArray();
+    return editedPlaylist;
+}
+
+export async function removeAccessUser(playlist_id, user_id) {
+    const update = { $pull: { "access": user_id } }
+    await playlistsData.updateOne({ _id: new ObjectId(`${playlist_id}`) }, update)
+    const editedPlaylist = await playlistsData.find({
+        _id: new ObjectId(`${playlist_id}`)
+    }).toArray();
+    return editedPlaylist;
+}
+
 export async function editPlaylistDetails(id, update) {
     const playlistUpdate = { $set: update }
     await playlistsData.updateOne({ _id: new ObjectId(`${id}`) }, playlistUpdate)

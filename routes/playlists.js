@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllPlaylists, getPlaylistById, addNewPlaylist, addTrackToPlaylist, deleteTrackFromPlaylist, editPlaylistDetails, deletePlaylist, addComment} from "../services/playlists.js";
+import { getAllPlaylists, getPlaylistById, addNewPlaylist, addTrackToPlaylist, deleteTrackFromPlaylist, editPlaylistDetails, deletePlaylist, addComment, removeAccessUser, addAccessUser} from "../services/playlists.js";
 
 const playlistsRouter = express.Router();
 
@@ -39,7 +39,7 @@ playlistsRouter.patch("/:id", async (req, res) => {
             res.status(500).json({ message: error.message });
         }
     }
-    if (req.query.action === "delete") {
+    if (req.query.action === "delete-track") {
         try { 
             const result = await deleteTrackFromPlaylist(req.params.id, req.body);
             res.send({ success: true, payload: result });
@@ -47,7 +47,7 @@ playlistsRouter.patch("/:id", async (req, res) => {
             res.status(500).json({ message: error.message });
         }
     }
-    if (req.query.action === "update") {
+    if (req.query.action === "update-playlist") {
         try { 
             const result = await editPlaylistDetails(req.params.id, req.body);
             res.send({ success: true, payload: result });
@@ -55,9 +55,25 @@ playlistsRouter.patch("/:id", async (req, res) => {
             res.status(500).json({ message: error.message });
         }
     }
-    if (req.query.action === "comment") {
+    if (req.query.action === "add-comment") {
         try { 
             const result = await addComment(req.params.id, req.body[0].track_id, req.body[1]);
+            res.send({ success: true, payload: result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    if (req.query.action === "add-access") {
+        try { 
+            const result = await addAccessUser(req.params.id, req.body.user_id);
+            res.send({ success: true, payload: result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    if (req.query.action === "remove-access") {
+        try {
+            const result = await removeAccessUser(req.params.id, req.body.user_id);
             res.send({ success: true, payload: result });
         } catch (error) {
             res.status(500).json({ message: error.message });
